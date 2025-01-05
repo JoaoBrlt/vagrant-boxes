@@ -1,0 +1,41 @@
+---
+name: CI
+
+"on":
+  # Manual trigger
+  workflow_dispatch:
+
+  # When a commit is pushed
+  push:
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-desktop-24.04
+
+    defaults:
+      run:
+        working-directory: ./${{ matrix.os }}
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v4
+
+      - name: Setup Packer
+        uses: hashicorp/setup-packer@v3
+        with:
+          version: 1.11.2
+
+      - name: Initialize Packer
+        run: packer init .
+
+      - name: Format the code
+        run: packer fmt -check .
+
+      - name: Validate the code
+        run: packer validate .

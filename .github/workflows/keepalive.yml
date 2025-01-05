@@ -1,0 +1,28 @@
+---
+name: Keepalive
+
+"on":
+  # Manual trigger
+  workflow_dispatch:
+
+  # Every day
+  schedule:
+    - cron: "0 0 * * *"
+
+permissions:
+  actions: write
+
+jobs:
+  keepalive:
+    name: Keepalive
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v4
+
+      - name: Keep the GitHub Actions workflows alive
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          workflow_files: cd.yml
+          time_elapsed: 0

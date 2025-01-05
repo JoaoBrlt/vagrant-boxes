@@ -1,0 +1,72 @@
+---
+name: CD
+
+"on":
+  # Manual trigger
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        required: true
+        description: Version
+
+  # Every month
+  schedule:
+    - cron: "0 8 1 * *"
+
+jobs:
+  cd:
+    name: CD
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        os:
+          - ubuntu-desktop-24.04
+
+    defaults:
+      run:
+        working-directory: ./${{ matrix.os }}
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v4
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Set up QEMU
+        run: |
+          sudo apt update
+          sudo apt install -y qemu-kvm libvirt-daemon-system
+          sudo adduser $USER kvm
+          sudo adduser $USER libvirt
+          sudo systemctl start libvirtd
+
+      - name: Set up Packer
+        uses: hashicorp/setup-packer@v3
+        with:
+          version: 1.11.2
+
+      - name: Initialize Packer
+        run: packer init .
+
+      - name: Format the code
+        run: packer fmt -check .
+
+      - name: Validate the code
+        run: packer validate .
+
+      - name: Generate the version number
+        id: version
+        run: echo "version=$(date +'%Y%m%d').0.0" >> $GITHUB_OUTPUT
+
+      - name: Build the box
+        env:
+          VERSION: ${{ inputs.version || steps.version.outputs.version }}
+          HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
+          HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
+        run: packer build -var "version=$VERSION" -var "client_id=$HCP_CLIENT_ID" -var "client_secret=$HCP_CLIENT_SECRET" .

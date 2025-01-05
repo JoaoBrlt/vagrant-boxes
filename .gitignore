@@ -1,0 +1,15 @@
+# Packer
+*.box
+*.iso
+**/builds
+
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# VS Code
+.vscode/
+
+# System files
+.DS_Store
+Thumbs.db
