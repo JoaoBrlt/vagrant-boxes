@@ -53,7 +53,7 @@ source "qemu" "vm" {
   net_device = "virtio-net"
 
   # ISO configuration
-  iso_url      = "https://releases.ubuntu.com/24.04/ubuntu-24.04.1-desktop-amd64.iso"
+  iso_url      = "https://old-releases.ubuntu.com/releases/noble/ubuntu-24.04.1-desktop-amd64.iso"
   iso_checksum = "sha256:c2e6f4dc37ac944e2ed507f87c6188dd4d3179bf4a3f9e110d3c88d1f3294bdc"
 
   # HTTP server configuration
