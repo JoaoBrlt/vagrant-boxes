@@ -41,10 +41,29 @@ else
 fi
 
 # Disable release upgrades
-sed -i -e "s/^Prompt=.*$/Prompt=never/" /etc/update-manager/release-upgrades
+sed -i "s/^Prompt=.*$/Prompt=never/" /etc/update-manager/release-upgrades
+
+# Disable APT timers and services
+systemctl stop apt-daily.timer
+systemctl stop apt-daily-upgrade.timer
+systemctl disable apt-daily.timer
+systemctl disable apt-daily-upgrade.timer
+systemctl mask apt-daily.service
+systemctl mask apt-daily-upgrade.service
+systemctl daemon-reload
 
 # Disable APT periodic activities
-echo 'APT::Periodic::Enable "0";' > /etc/apt/apt.conf.d/10periodic
+cat > /etc/apt/apt.conf.d/10periodic <<EOF
+APT::Periodic::Enable "0";
+APT::Periodic::Update-Package-Lists "0";
+APT::Periodic::Download-Upgradeable-Packages "0";
+APT::Periodic::AutocleanInterval "0";
+APT::Periodic::Unattended-Upgrade "0";
+EOF
+
+# Remove the unattended upgrades package
+rm -rf /var/log/unattended-upgrades
+apt -y purge unattended-upgrades
 
 # Update the repository cache
 apt -y update
