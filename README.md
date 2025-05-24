@@ -8,9 +8,10 @@ This repository contains the Packer templates to build my custom Vagrant boxes.
 
 ## Requirements
 
-- [Packer](https://www.packer.io/)
 - [QEMU](https://www.qemu.org/)
 - [KVM](https://linux-kvm.org/)
+- [libvirt](https://libvirt.org/)
+- [Packer](https://www.packer.io/)
 
 ## Select
 
