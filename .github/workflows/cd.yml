@@ -15,19 +15,36 @@ name: CD
     - cron: "0 8 1 * *"
 
 jobs:
-  cd:
-    name: CD
+  detect_boxes:
+    name: Detect boxes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    outputs:
+      boxes: ${{ steps.detect_boxes.outputs.boxes }}
+
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v4
+
+      - name: Detect the boxes
+        id: detect_boxes
+        run: echo "boxes=$(ls -d ./boxes/* | awk -F '/' '{print $3}' | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')" >> ${GITHUB_OUTPUT}
+
+  deploy:
+    name: Deploy
+    needs: detect_boxes
     runs-on: ubuntu-latest
     timeout-minutes: 60
 
     strategy:
+      fail-fast: false
       matrix:
-        os:
-          - ubuntu-desktop-24.04
+        box: ${{ fromJson(needs.detect_boxes.outputs.boxes) }}
 
     defaults:
       run:
-        working-directory: ./${{ matrix.os }}
+        working-directory: ./boxes/${{ matrix.box }}
 
     steps:
       - name: Checkout the project
@@ -65,7 +82,7 @@ jobs:
         id: version
         run: echo "version=$(date +'%Y%m%d').0.0" >> $GITHUB_OUTPUT
 
-      - name: Build the box
+      - name: Build and deploy the box
         env:
           VERSION: ${{ inputs.version || steps.version.outputs.version }}
           HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}

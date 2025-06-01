@@ -18,7 +18,7 @@ This repository contains the Packer templates to build my custom Vagrant boxes.
 - Navigate to the desired box:
 
 ```bash
-cd ubuntu-desktop-24.04
+cd boxes/...
 ```
 
 ## Initialize
@@ -53,9 +53,9 @@ packer validate .
 packer build -except=vagrant-registry .
 ```
 
-## Release
+## Deploy
 
-- Build and release the box:
+- Build and deploy the box:
 
 ```bash
 packer build -var "version=[REQUIRED]" -var "client_id=[REQUIRED]" -var "client_secret=[REQUIRED]" .
