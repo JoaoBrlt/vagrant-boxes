@@ -1,5 +1,8 @@
 # Vagrant Boxes
 
+[![CI][ci-badge-url]][ci-workflow-url]
+[![CD][cd-badge-url]][cd-workflow-url]
+
 This repository contains the Packer templates to build my custom Vagrant boxes.
 
 ## Available boxes
@@ -64,3 +67,8 @@ packer build -var "version=[REQUIRED]" -var "client_id=[REQUIRED]" -var "client_
 ## License
 
 This project is licensed under the GPLv3 License - see the [LICENSE](LICENSE) file for details.
+
+[ci-badge-url]: https://github.com/JoaoBrlt/vagrant-boxes/actions/workflows/ci.yml/badge.svg
+[ci-workflow-url]: https://github.com/JoaoBrlt/vagrant-boxes/actions/workflows/ci.yml
+[cd-badge-url]: https://github.com/JoaoBrlt/vagrant-boxes/actions/workflows/cd.yml/badge.svg
+[cd-workflow-url]: https://github.com/JoaoBrlt/vagrant-boxes/actions/workflows/cd.yml
