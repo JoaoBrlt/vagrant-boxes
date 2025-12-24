@@ -1,0 +1,73 @@
+name: Clean up
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # When a commit is pushed
+  push:
+
+jobs:
+  cleanup:
+    name: Clean up
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Before
+        run: df -h
+
+      - name: Before list
+        run: du -h --max-depth=4 / 2>/dev/null | sort -hr | head -50
+
+      - name: Clean up
+        run: |
+          echo "Removing Java..."
+          sudo rm -rf /usr/lib/jvm
+          echo "Removed Java."
+          
+          echo "Removing .NET..."
+          sudo rm -rf /usr/share/dotnet
+          echo "Removed .NET."
+          
+          echo "Removing Swift..."
+          sudo rm -rf /usr/share/swift
+          echo "Removed Swift."
+          
+          echo "Removing Haskell..."
+          sudo rm -rf /usr/local/.ghcup
+          echo "Removed Haskell."
+          
+          echo "Removing Julia..."
+          sudo rm -rf /usr/local/julia*
+          echo "Removed Julia."
+          
+          echo "Removing Android..."
+          sudo rm -rf /usr/local/lib/android
+          echo "Removed Android."
+          
+          echo "Removing Powershell..."
+          sudo rm -rf /usr/local/share/powershell
+          echo "Removed Powershell."
+          
+          echo "Removing CodeQL..."
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          echo "Removed CodeQL."
+          
+          echo "Removing Google Cloud SDK..."
+          sudo rm -rf /usr/lib/google-cloud-sdk
+          echo "Removed Google Cloud SDK."
+
+          echo "Pruning Docker unused data..."
+          docker system prune -af
+          echo "Pruned Docker unused data."
+          
+          echo "Pruning Docker build cache..."
+          docker builder prune -af
+          echo "Pruned Docker build cache."
+
+      - name: After
+        run: df -h
+
+      - name: After list
+        run: du -h --max-depth=4 / 2>/dev/null | sort -hr | head -50
