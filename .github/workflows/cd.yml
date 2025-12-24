@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - name: Checkout the project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Detect the boxes
         id: detect_boxes
@@ -48,7 +48,53 @@ jobs:
 
     steps:
       - name: Checkout the project
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
+
+      - name: Clean up the runner
+        run: |
+          echo "Removing Java..."
+          sudo rm -rf /usr/lib/jvm
+          echo "Removed Java."
+          
+          echo "Removing .NET..."
+          sudo rm -rf /usr/share/dotnet
+          echo "Removed .NET."
+          
+          echo "Removing Swift..."
+          sudo rm -rf /usr/share/swift
+          echo "Removed Swift."
+          
+          echo "Removing Haskell..."
+          sudo rm -rf /usr/local/.ghcup
+          echo "Removed Haskell."
+          
+          echo "Removing Julia..."
+          sudo rm -rf /usr/local/julia*
+          echo "Removed Julia."
+          
+          echo "Removing Android..."
+          sudo rm -rf /usr/local/lib/android
+          echo "Removed Android."
+          
+          echo "Removing Powershell..."
+          sudo rm -rf /usr/local/share/powershell
+          echo "Removed Powershell."
+          
+          echo "Removing CodeQL..."
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          echo "Removed CodeQL."
+          
+          echo "Removing Google Cloud SDK..."
+          sudo rm -rf /usr/lib/google-cloud-sdk
+          echo "Removed Google Cloud SDK."
+          
+          echo "Pruning Docker unused data..."
+          docker system prune -af
+          echo "Pruned Docker unused data."
+          
+          echo "Pruning Docker build cache..."
+          docker builder prune -af
+          echo "Pruned Docker build cache."
 
       - name: Enable KVM
         run: |
@@ -67,7 +113,7 @@ jobs:
       - name: Set up Packer
         uses: hashicorp/setup-packer@v3
         with:
-          version: 1.12.0
+          version: 1.14.3
 
       - name: Initialize Packer
         run: packer init .
