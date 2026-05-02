@@ -47,7 +47,7 @@ jobs:
       - name: Setup Packer
         uses: hashicorp/setup-packer@v3
         with:
-          version: 1.14.3
+          version: 1.15.3
 
       - name: Initialize Packer
         run: packer init .
