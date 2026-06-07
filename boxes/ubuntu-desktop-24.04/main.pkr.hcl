@@ -13,6 +13,18 @@ packer {
   }
 }
 
+variable "iso_url" {
+  type        = string
+  default     = "https://releases.ubuntu.com/24.04/ubuntu-24.04.4-desktop-amd64.iso"
+  description = "The URL of the ISO image."
+}
+
+variable "iso_checksum" {
+  type        = string
+  default     = "sha256:3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e"
+  description = "The checksum of the ISO image."
+}
+
 variable "client_id" {
   type        = string
   description = "The service principal client ID for the HCP API. Required when releasing a new version."
@@ -53,8 +65,8 @@ source "qemu" "vm" {
   net_device = "virtio-net"
 
   # ISO configuration
-  iso_url      = "https://releases.ubuntu.com/24.04/ubuntu-24.04.4-desktop-amd64.iso"
-  iso_checksum = "sha256:3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e"
+  iso_url      = "${var.iso_url}"
+  iso_checksum = "${var.iso_checksum}"
 
   # HTTP server configuration
   http_directory = "http"
