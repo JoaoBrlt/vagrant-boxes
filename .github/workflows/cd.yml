@@ -28,6 +28,10 @@ jobs:
             iso_url: https://releases.ubuntu.com/24.04/ubuntu-24.04.4-desktop-amd64.iso
             iso_checksum: sha256:3a4c9877b483ab46d7c3fbe165a0db275e1ae3cfe56a5657e5a47c2f99a99d1e
 
+          - box: ubuntu-desktop-26.04
+            iso_url: https://releases.ubuntu.com/26.04/ubuntu-26.04-desktop-amd64.iso
+            iso_checksum: sha256:487f87faaf547ea30e0aba4d5b53346292571256b25333a978db1692bcee9dd2
+
     defaults:
       run:
         working-directory: ./boxes/${{ matrix.box }}

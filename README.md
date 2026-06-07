@@ -8,6 +8,7 @@ This repository contains the Packer templates to build my custom Vagrant boxes.
 ## Available boxes
 
 - [joaobrlt/ubuntu-desktop-24.04](https://portal.cloud.hashicorp.com/vagrant/discover/joaobrlt/ubuntu-desktop-24.04) (amd64, libvirt)
+- [joaobrlt/ubuntu-desktop-26.04](https://portal.cloud.hashicorp.com/vagrant/discover/joaobrlt/ubuntu-desktop-26.04) (amd64, libvirt)
 
 ## Requirements
 

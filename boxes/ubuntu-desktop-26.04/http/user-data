@@ -1,0 +1,24 @@
+#cloud-config
+autoinstall:
+  version: 1
+  identity:
+    hostname: vagrant
+    username: vagrant
+    password: "$6$rounds=4096$76MAEBTv1tOZFanz$eR97A1gm88LaOUpL6/GQE3oJ55DaShYaJ42JLmF9J0L0NmA0nCFkoN8aEHb8vtIbDAM/LZrgP3Rf5v4YMblDp1"
+  locale: en_US
+  keyboard:
+    layout: us
+  network:
+    version: 2
+    ethernets:
+      eth0:
+        dhcp4: true
+        dhcp-identifier: mac
+  storage:
+    layout:
+      name: lvm
+  ssh:
+    install-server: yes
+    allow-pw: yes
+  user-data:
+    disable_root: false

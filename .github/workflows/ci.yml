@@ -19,6 +19,7 @@ jobs:
       matrix:
         box:
           - ubuntu-desktop-24.04
+          - ubuntu-desktop-26.04
 
     defaults:
       run:
