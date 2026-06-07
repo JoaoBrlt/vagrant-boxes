@@ -120,19 +120,22 @@ jobs:
         run: echo "version=$(date +'%Y%m%d').0.0" >> $GITHUB_OUTPUT
 
       - name: Download the ISO
-        if: matrix.iso_url && matrix.iso_checksum
+        id: iso
         env:
           ISO_URL: ${{ matrix.iso_url }}
           ISO_CHECKSUM: ${{ matrix.iso_checksum }}
         run: |
+          ISO_DIRECTORY="${RUNNER_TEMP}/iso"
+          ISO_FILE="$(basename "$ISO_URL")"
+          
           echo "Downloading the ISO..."
           aria2c \
-            --dir="${RUNNER_TEMP}/iso" \
-            --out="${ISO_URL##*/}" \
+            --dir="${ISO_DIRECTORY}" \
+            --out="${ISO_FILE}" \
             --continue=true \
             --max-tries=10 \
             --retry-wait=10 \
-            --connect-timeout=30 \
+            --connect-timeout=60 \
             --timeout=60 \
             --max-connection-per-server=16 \
             --split=16 \
@@ -145,14 +148,21 @@ jobs:
             "${ISO_URL}"
           echo "Downloaded the ISO."
 
-          echo "Configuring Packer to use the downloaded ISO..."
-          echo "PKR_VAR_iso_url=file://${RUNNER_TEMP}/iso/${ISO_URL##*/}" >> "${GITHUB_ENV}"
-          echo "PKR_VAR_iso_checksum=${ISO_CHECKSUM}" >> "${GITHUB_ENV}"
-          echo "Configured Packer to use the downloaded ISO."
+          echo "iso_url=file://${ISO_DIRECTORY}/${ISO_FILE}" >> "${GITHUB_OUTPUT}"
+          echo "iso_checksum=${ISO_CHECKSUM}" >> "${GITHUB_OUTPUT}"
 
       - name: Build and deploy the box
         env:
-          VERSION: ${{ inputs.version || steps.version.outputs.version }}
+          ISO_URL: ${{ steps.iso.outputs.iso_url }}
+          ISO_CHECKSUM: ${{ steps.iso.outputs.iso_checksum }}
           HCP_CLIENT_ID: ${{ secrets.HCP_CLIENT_ID }}
           HCP_CLIENT_SECRET: ${{ secrets.HCP_CLIENT_SECRET }}
-        run: packer build -var "version=$VERSION" -var "client_id=$HCP_CLIENT_ID" -var "client_secret=$HCP_CLIENT_SECRET" .
+          VERSION: ${{ inputs.version || steps.version.outputs.version }}
+        run: |
+          packer build \
+            -var "iso_url=$ISO_URL" \
+            -var "iso_checksum=$ISO_CHECKSUM" \
+            -var "client_id=$HCP_CLIENT_ID" \
+            -var "client_secret=$HCP_CLIENT_SECRET" \
+            -var "version=$VERSION" \
+            .
