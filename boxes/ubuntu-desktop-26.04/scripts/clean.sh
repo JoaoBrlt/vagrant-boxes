@@ -4,10 +4,10 @@ set -eux
 export DEBIAN_FRONTEND=noninteractive
 
 # Remove the orphan packages
-apt autoremove -y --purge
+apt-get autoremove -y --purge
 
 # Clean the apt archives
-apt clean
+apt-get clean
 
 # Clean the apt lists
 rm -rf /var/lib/apt/lists/*

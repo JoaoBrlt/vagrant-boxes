@@ -4,10 +4,10 @@ set -eux
 export DEBIAN_FRONTEND=noninteractive
 
 # Update the repository cache
-apt -y update
+apt-get -y update
 
 # Install the dependencies
-apt -y install curl
+apt-get -y install curl
 
 # Allow password-less sudo
 cat > /etc/sudoers.d/vagrant << EOF
@@ -62,13 +62,13 @@ EOF
 
 # Remove the unattended upgrades package
 rm -rf /var/log/unattended-upgrades
-apt -y purge unattended-upgrades
+apt-get -y purge unattended-upgrades
 
 # Update the repository cache
-apt -y update
+apt-get -y update
 
 # Upgrade all the packages
-apt -y full-upgrade -o Dpkg::Options::="--force-confnew"
+apt-get -y full-upgrade -o Dpkg::Options::="--force-confnew"
 
 # Reboot the machine
 reboot
