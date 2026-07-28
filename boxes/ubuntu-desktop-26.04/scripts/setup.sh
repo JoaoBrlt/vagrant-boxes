@@ -9,9 +9,8 @@ apt -y update
 # Install the dependencies
 apt -y install curl
 
-# Allow password-less sudo and disable requiretty
+# Allow password-less sudo
 cat > /etc/sudoers.d/vagrant << EOF
-Defaults:vagrant
 vagrant ALL=(ALL) NOPASSWD:ALL
 EOF
 chmod 440 /etc/sudoers.d/vagrant
