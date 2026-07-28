@@ -101,6 +101,12 @@ build {
     pause_after       = "30s" # Wait for the machine to reboot
   }
 
+  # Clean the machine
+  provisioner "shell" {
+    execute_command = "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'"
+    script          = "scripts/clean.sh"
+  }
+
   post-processors {
     # Convert the artifact into a Vagrant box
     post-processor "vagrant" {
