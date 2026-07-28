@@ -78,13 +78,13 @@ source "qemu" "vm" {
   ssh_username = "vagrant"
   ssh_password = "vagrant"
   ssh_port     = 22
-  ssh_timeout  = "30m"
+  ssh_timeout  = "60m"
 
   # Boot configuration
   boot_wait = "10s"
   boot_command = [
     "c<wait>",
-    "linux /casper/vmlinuz --- autoinstall ds=\"nocloud;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>",
+    "linux /casper/vmlinuz --- autoinstall ds=\"nocloud-net;s=http://{{ .HTTPIP }}:{{ .HTTPPort }}/\"<enter><wait>",
     "initrd /casper/initrd<enter><wait>",
     "boot<enter><wait>"
   ]

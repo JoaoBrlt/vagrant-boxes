@@ -11,7 +11,7 @@ apt -y install curl
 
 # Allow password-less sudo and disable requiretty
 cat > /etc/sudoers.d/vagrant << EOF
-Defaults:vagrant !requiretty
+Defaults:vagrant
 vagrant ALL=(ALL) NOPASSWD:ALL
 EOF
 chmod 440 /etc/sudoers.d/vagrant
