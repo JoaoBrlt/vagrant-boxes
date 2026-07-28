@@ -54,7 +54,7 @@ source "qemu" "vm" {
   # General configuration
   vm_name = "ubuntu-desktop-26.04-amd64"
   cpus    = 2
-  memory  = 4096
+  memory  = 6144
 
   # Disk configuration
   disk_interface = "virtio"
@@ -78,7 +78,7 @@ source "qemu" "vm" {
   ssh_username = "vagrant"
   ssh_password = "vagrant"
   ssh_port     = 22
-  ssh_timeout  = "60m"
+  ssh_timeout  = "30m"
 
   # Boot configuration
   boot_wait = "10s"
