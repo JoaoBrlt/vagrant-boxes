@@ -1,0 +1,21 @@
+# Dependabot options
+# See https://docs.github.com/en/code-security/reference/supply-chain-security/dependabot-options-reference
+version: 2
+
+updates:
+  # GitHub Actions
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: "cron"
+      cronjob: "0 8 * * 1"
+      timezone: "Europe/Paris"
+    cooldown:
+      default-days: 3
+    open-pull-requests-limit: 5
+    labels:
+      - "Type: Chore"
+    groups:
+      all-actions:
+        patterns:
+          - "*"
