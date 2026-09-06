@@ -1,12 +1,23 @@
----
 name: CI
 
-"on":
+# Use a concurrency group to avoid testing the same branch multiple times in parallel
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true # Cancel the previous job
+
+on:
   # Manual trigger
   workflow_dispatch:
 
-  # When a commit is pushed
+  # When a commit is pushed to the master branch
   push:
+    branches:
+      - master
+
+  # When a pull request is opened, synchronized, reopened
+  pull_request:
+    branches:
+      - "**"
 
 jobs:
   lint:
